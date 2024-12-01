@@ -13,6 +13,16 @@ pub fn difference_vector(left: &Vec<i32>, right: &Vec<i32>) -> Vec<i32> {
     result
 }
 
+pub fn similarity_score(number: i32, vector: &[i32]) -> i32 {
+    let frequency: i32 = vector
+        .iter()
+        .filter(|&e| *e == number)
+        .count()
+        .try_into()
+        .expect("Weird things going on!");
+    frequency * number
+}
+
 pub fn sum_up_vector(vector: &[i32]) -> i32 {
     vector.iter().sum()
 }
@@ -33,5 +43,14 @@ mod tests {
     fn can_sum_up_vector() {
         let vector = vec![5, 0, 1, 2];
         assert_eq!(8, sum_up_vector(&vector));
+    }
+
+    #[test]
+    fn can_get_similarity_score() {
+        let vector = vec![4, 3, 5, 3, 9, 3];
+        assert_eq!(9, similarity_score(3, &vector));
+        assert_eq!(4, similarity_score(4, &vector));
+        assert_eq!(0, similarity_score(2, &vector));
+        assert_eq!(0, similarity_score(1, &vector));
     }
 }
