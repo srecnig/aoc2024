@@ -1,3 +1,5 @@
+[![Rust](https://github.com/srecnig/aoc24/actions/workflows/rust.yml/badge.svg)](https://github.com/srecnig/aoc24/actions/workflows/rust.yml)
+
 # aoc2024 🎄
 
 [advent of code '24](https://adventofcode.com/). trying rust again, let's see how far i get.
