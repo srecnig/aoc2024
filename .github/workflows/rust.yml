@@ -1,4 +1,4 @@
-name: Rust
+name: linting & tests
 
 on:
   push:
