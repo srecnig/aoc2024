@@ -1,3 +1,8 @@
 .DS_Store
 debug/
 target/
+
+# aoc inputs
+input.txt
+input1.txt
+
