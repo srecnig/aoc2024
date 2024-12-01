@@ -1,4 +1,4 @@
-[![Rust](https://github.com/srecnig/aoc24/actions/workflows/rust.yml/badge.svg)](https://github.com/srecnig/aoc24/actions/workflows/rust.yml)
+[![linting & tests](https://github.com/srecnig/aoc24/actions/workflows/rust.yml/badge.svg)](https://github.com/srecnig/aoc24/actions/workflows/rust.yml)
 
 # aoc2024 🎄
 
