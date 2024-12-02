@@ -21,4 +21,24 @@ fn main() {
         .count();
 
     println!("part1: {:?}", safe_report_count);
+
+    let safe_report_dampened_count = reports
+        .iter()
+        .filter(|&report| {
+            if is_report_safe(report) {
+                true
+            } else {
+                for i in 0..report.len() {
+                    let mut dampened_report = report.clone();
+                    dampened_report.remove(i);
+                    if is_report_safe(&dampened_report) {
+                        return true;
+                    }
+                }
+                false
+            }
+        })
+        .count();
+
+    println!("part2: {:?}", safe_report_dampened_count);
 }
