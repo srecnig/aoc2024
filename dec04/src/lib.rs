@@ -94,6 +94,29 @@ pub fn count_xmas(line: &str) -> i32 {
     (forward_count + reverse_count).try_into().unwrap()
 }
 
+pub fn detect_x_mas_at(grid: &[Vec<char>], x: usize, y: usize) -> bool {
+    let x_max = grid.len() - 1;
+    let y_max = grid.len() - 1;
+
+    if x + 2 > x_max || y + 2 > y_max {
+        return false;
+    }
+    if grid[y + 1][x + 1] != 'A' {
+        return false;
+    }
+    if !((grid[y][x] == 'M' && grid[y + 2][x + 2] == 'S')
+        || (grid[y][x] == 'S' && grid[y + 2][x + 2] == 'M'))
+    {
+        return false;
+    }
+    if !((grid[y][x + 2] == 'M' && grid[y + 2][x] == 'S')
+        || (grid[y][x + 2] == 'S' && grid[y + 2][x] == 'M'))
+    {
+        return false;
+    }
+    true
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -133,5 +156,21 @@ mod tests {
         assert_eq!(2, count_xmas(&String::from("XMASAMX.MM")));
         assert_eq!(0, count_xmas(&String::from("XMA")));
         assert_eq!(3, count_xmas(&String::from("XMASAMX.XMASM")));
+    }
+
+    #[test]
+    fn can_detect_x_mas_at() {
+        let grid: Vec<Vec<char>> = vec![
+            vec!['.', '.', '.', '.', '.'],
+            vec!['.', 'M', '.', 'S', '.'],
+            vec!['.', '.', 'A', '.', '.'],
+            vec!['.', 'M', '.', 'S', '.'],
+            vec!['.', '.', '.', '.', '.'],
+        ];
+        assert!(detect_x_mas_at(&grid, 1, 1));
+        assert!(!detect_x_mas_at(&grid, 0, 0));
+        assert!(!detect_x_mas_at(&grid, 4, 4));
+        assert!(!detect_x_mas_at(&grid, 0, 3));
+        assert!(!detect_x_mas_at(&grid, 3, 0));
     }
 }
