@@ -5,7 +5,7 @@ use dec02::is_report_safe;
 fn main() {
     let mut reports: Vec<Vec<i32>> = Vec::new();
 
-    let input = fs::read_to_string("input1.txt").expect("Failed to read input!");
+    let input = fs::read_to_string("input.txt").expect("Failed to read input!");
 
     for line in input.lines() {
         let levels: Vec<i32> = line

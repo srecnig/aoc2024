@@ -6,7 +6,7 @@ fn main() {
     let mut left: Vec<i32> = Vec::new();
     let mut right: Vec<i32> = Vec::new();
 
-    let input = fs::read_to_string("input1.txt").expect("Failed to read input!");
+    let input = fs::read_to_string("input.txt").expect("Failed to read input!");
     for line in input.lines() {
         let numbers: Vec<i32> = line
             .split("   ")

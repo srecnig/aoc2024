@@ -1,6 +1,6 @@
-pub fn difference_vector(left: &Vec<i32>, right: &Vec<i32>) -> Vec<i32> {
-    let mut sorted_left = left.clone();
-    let mut sorted_right = right.clone();
+pub fn difference_vector(left: &[i32], right: &[i32]) -> Vec<i32> {
+    let mut sorted_left: Vec<i32> = left.to_vec();
+    let mut sorted_right: Vec<i32> = right.to_vec();
     let mut result = Vec::new();
     sorted_left.sort();
     sorted_right.sort();

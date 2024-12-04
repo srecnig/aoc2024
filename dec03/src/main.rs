@@ -3,7 +3,7 @@ use std::fs;
 use dec03::{apply_conditionals, detect_multiplications, multiply};
 
 fn main() {
-    let input = fs::read_to_string("input1.txt").expect("Failed to read input!");
+    let input = fs::read_to_string("input.txt").expect("Failed to read input!");
     let normalized_input = input.replace('\n', "");
 
     let multiplications = detect_multiplications(&normalized_input);

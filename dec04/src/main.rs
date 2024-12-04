@@ -3,7 +3,7 @@ use std::fs;
 use dec04::{count_xmas, detect_x_mas_at, extract_lines};
 
 fn main() {
-    let input = fs::read_to_string("input1.txt").expect("Failed to read input!");
+    let input = fs::read_to_string("input.txt").expect("Failed to read input!");
     let mut grid: Vec<Vec<char>> = Vec::new();
     for line in input.lines() {
         grid.push(line.chars().collect());
