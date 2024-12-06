@@ -49,10 +49,6 @@ impl Map {
         &self.points[y][x]
     }
 
-    fn player(&self) -> &Player {
-        &self.player
-    }
-
     fn turn_player(&mut self) {
         match &self.player.direction {
             PlayerFacing::Up => {
@@ -167,15 +163,15 @@ mod tests {
     fn can_turn_player() {
         let lines = vec![".#", "^."];
         let mut map = build_map(lines);
-        assert_eq!(PlayerFacing::Up, map.player().direction);
+        assert_eq!(PlayerFacing::Up, map.player.direction);
         map.turn_player();
-        assert_eq!(PlayerFacing::Right, map.player().direction);
+        assert_eq!(PlayerFacing::Right, map.player.direction);
         map.turn_player();
-        assert_eq!(PlayerFacing::Down, map.player().direction);
+        assert_eq!(PlayerFacing::Down, map.player.direction);
         map.turn_player();
-        assert_eq!(PlayerFacing::Left, map.player().direction);
+        assert_eq!(PlayerFacing::Left, map.player.direction);
         map.turn_player();
-        assert_eq!(PlayerFacing::Up, map.player().direction);
+        assert_eq!(PlayerFacing::Up, map.player.direction);
     }
 
     #[test]
@@ -186,21 +182,21 @@ mod tests {
         let mut map = build_map(lines);
         // move up once
         assert!(map.move_player());
-        assert_eq!(PlayerFacing::Up, map.player().direction);
-        assert_eq!(0, map.player().x);
-        assert_eq!(0, map.player().y);
+        assert_eq!(PlayerFacing::Up, map.player.direction);
+        assert_eq!(0, map.player.x);
+        assert_eq!(0, map.player.y);
         // we're out of bounds and didn't move.
         assert!(!map.move_player());
-        assert_eq!(0, map.player().x);
-        assert_eq!(0, map.player().y);
+        assert_eq!(0, map.player.x);
+        assert_eq!(0, map.player.y);
         // turn right
         map.turn_player();
-        assert_eq!(PlayerFacing::Right, map.player().direction);
+        assert_eq!(PlayerFacing::Right, map.player.direction);
         // move into obstacle, we'll be still at the same place, but have turned once more
         assert!(map.move_player());
-        assert_eq!(0, map.player().x);
-        assert_eq!(0, map.player().y);
-        assert_eq!(PlayerFacing::Down, map.player().direction);
+        assert_eq!(0, map.player.x);
+        assert_eq!(0, map.player.y);
+        assert_eq!(PlayerFacing::Down, map.player.direction);
         // 0,0 and 0,1 should've been visited
         assert!(map.at(0, 0).visited);
         assert!(map.at(0, 1).visited);
