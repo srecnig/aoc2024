@@ -19,9 +19,15 @@ fn main() {
 
     let valid_sum: i64 = equations
         .iter()
-        .filter(|&e| e.check())
+        .filter(|&e| e.check(false))
         .map(|e| e.result)
         .sum();
-
     println!("pt1: {:?}", valid_sum);
+
+    let valid_sum: i64 = equations
+        .iter()
+        .filter(|&e| e.check(true))
+        .map(|e| e.result)
+        .sum();
+    println!("pt2: {:?}", valid_sum);
 }
