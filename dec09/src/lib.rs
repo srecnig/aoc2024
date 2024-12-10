@@ -14,6 +14,7 @@ impl Disk {
                 let block = Block {
                     size: count,
                     content,
+                    is_file: true,
                 };
                 file_number += 1;
                 block
@@ -22,6 +23,7 @@ impl Disk {
                 Block {
                     size: count,
                     content,
+                    is_file: false,
                 }
             };
 
@@ -64,6 +66,40 @@ impl Disk {
         }
     }
 
+    pub fn compact_files(&mut self) {
+        // first get all the blocks that are files
+        let file_indices: Vec<usize> = self
+            .blocks
+            .iter()
+            .enumerate()
+            .filter(|(_, b)| b.is_file)
+            .map(|(i, _b)| i)
+            .rev()
+            .collect();
+
+        // find all non-files left of our file, that still have enough place
+        for file_index in file_indices {
+            let candidate_indices: Vec<usize> = self
+                .blocks
+                .iter()
+                .enumerate()
+                .filter(|(i, b)| {
+                    !b.is_file
+                        && *i < file_index
+                        && (b.size - b.content.len() as u32
+                            >= self.blocks[file_index].content.len() as u32)
+                })
+                .map(|(i, _b)| i)
+                .collect();
+
+            // if we have candidates, push the file in
+            if !candidate_indices.is_empty() {
+                let file: Vec<u32> = self.blocks[file_index].content.drain(0..).collect();
+                self.blocks[candidate_indices[0]].content.extend(file);
+            }
+        }
+    }
+
     pub fn checksum(&self) -> i64 {
         let mut checksum: i64 = 0;
         let mut global_index: u32 = 0;
@@ -71,6 +107,9 @@ impl Disk {
             for part in block.content.iter() {
                 checksum += (part * global_index) as i64;
                 global_index += 1;
+            }
+            if block.size != block.content.len() as u32 {
+                global_index += block.size - block.content.len() as u32;
             }
         }
         checksum
@@ -81,6 +120,7 @@ impl Disk {
 struct Block {
     size: u32,
     content: Vec<u32>,
+    is_file: bool,
 }
 
 #[cfg(test)]
@@ -141,5 +181,31 @@ mod tests {
         assert_eq!(vec![6], disk.blocks[11].content);
         assert_eq!(vec![6], disk.blocks[12].content);
         assert_eq!(1928, disk.checksum());
+    }
+
+    #[test]
+    fn can_do_compact_by_files() {
+        let mut disk: Disk = Disk::new("2333133121414131402");
+        disk.compact_files();
+        assert_eq!(vec![0, 0], disk.blocks[0].content);
+        assert_eq!(vec![9, 9, 2], disk.blocks[1].content);
+        assert_eq!(vec![1, 1, 1], disk.blocks[2].content);
+        assert_eq!(vec![7, 7, 7], disk.blocks[3].content);
+        assert_eq!(0, disk.blocks[4].content.len());
+        assert_eq!(vec![4, 4], disk.blocks[5].content);
+        assert_eq!(vec![3, 3, 3], disk.blocks[6].content);
+        assert_eq!(0, disk.blocks[7].content.len());
+        assert_eq!(0, disk.blocks[8].content.len());
+        assert_eq!(0, disk.blocks[9].content.len());
+        assert_eq!(vec![5, 5, 5, 5], disk.blocks[10].content);
+        assert_eq!(0, disk.blocks[11].content.len());
+        assert_eq!(vec![6, 6, 6, 6], disk.blocks[12].content);
+        assert_eq!(0, disk.blocks[13].content.len());
+        assert_eq!(0, disk.blocks[14].content.len());
+        assert_eq!(0, disk.blocks[15].content.len());
+        assert_eq!(vec![8, 8, 8, 8], disk.blocks[16].content);
+        assert_eq!(0, disk.blocks[17].content.len());
+        assert_eq!(0, disk.blocks[18].content.len());
+        assert_eq!(2858, disk.checksum());
     }
 }
