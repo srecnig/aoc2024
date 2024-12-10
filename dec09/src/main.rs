@@ -9,4 +9,8 @@ fn main() {
     let mut disk: Disk = Disk::new(&normalized_input);
     disk.compact();
     println!("pt1: {}", disk.checksum());
+
+    let mut disk: Disk = Disk::new(&normalized_input);
+    disk.compact_files();
+    println!("pt1: {}", disk.checksum());
 }
