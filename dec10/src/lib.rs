@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 #[derive(Debug)]
 struct Trailhead {
     x: usize,
@@ -13,7 +15,7 @@ pub struct Map {
 }
 
 impl Map {
-    pub fn new(input: String) -> Map {
+    pub fn new(input: &String) -> Map {
         let mut map: Vec<Vec<u32>> = Vec::new();
         let mut trailheads: Vec<Trailhead> = Vec::new();
 
@@ -42,15 +44,30 @@ impl Map {
         }
     }
 
-    pub fn hike(&self) -> u32 {
-        let mut score: u32 = 0;
+    pub fn score(&self) -> u32 {
+        let trails = self.hike();
+        let mut score = 0;
+        for trail in trails {
+            let unique_peaks: HashSet<(usize, usize)> = trail.into_iter().collect();
+            score += unique_peaks.len();
+        }
+        score as u32
+    }
+
+    pub fn rating(&self) -> u32 {
+        let trails = self.hike();
+        trails.into_iter().map(|t| t.len() as u32).sum()
+    }
+
+    fn hike(&self) -> Vec<Vec<(usize, usize)>> {
+        let mut trails: Vec<Vec<(usize, usize)>> = Vec::new();
 
         for trailhead in &self.trailheads {
             let mut found: Vec<(usize, usize)> = Vec::new();
             self.wander(0, trailhead.x, trailhead.y, &mut found);
-            score += found.len() as u32;
+            trails.push(found);
         }
-        score
+        trails
     }
 
     fn wander(
@@ -60,12 +77,9 @@ impl Map {
         current_y: usize,
         found: &mut Vec<(usize, usize)>,
     ) {
-        // if we're at 9, we're done. add to found if not yet present.
+        // if we're at 9, we're done.
         if current_step == 9 {
-            if !found.contains(&(current_x, current_y)) {
-                found.push((current_x, current_y));
-            }
-
+            found.push((current_x, current_y));
             return;
         }
 
@@ -97,7 +111,7 @@ mod tests {
         let input = "9870456
 8761328
 4562987";
-        let map = Map::new(input.to_string());
+        let map = Map::new(&input.to_string());
         assert_eq!(1, map.trailheads.len());
         assert_eq!(0, map.trailheads[0].y);
         assert_eq!(3, map.trailheads[0].x);
@@ -113,8 +127,8 @@ mod tests {
 8111118
 9222229
 ";
-        let map = Map::new(input.to_string());
-        map.hike();
+        let map = Map::new(&input.to_string());
+        assert_eq!(2, map.score());
     }
 
     #[test]
@@ -127,9 +141,9 @@ mod tests {
 8761111
 9871111
 ";
-        let map = Map::new(input.to_string());
+        let map = Map::new(&input.to_string());
         println!("{:?}", map);
-        assert_eq!(4, map.hike());
+        assert_eq!(4, map.score());
     }
 
     #[test]
@@ -142,9 +156,41 @@ mod tests {
 1119442
 5555501
 ";
-        let map = Map::new(input.to_string());
+        let map = Map::new(&input.to_string());
         println!("{:?}", map);
         assert_eq!(2, map.trailheads.len());
-        assert_eq!(3, map.hike());
+        assert_eq!(3, map.score());
+    }
+
+    #[test]
+    fn can_get_rating() {
+        let input = "8888808
+8843215
+8858827
+8865437
+1171147
+1187657
+1191111
+";
+        let map = Map::new(&input.to_string());
+        println!("{:?}", map);
+        assert_eq!(1, map.trailheads.len());
+        assert_eq!(1, map.score());
+        assert_eq!(3, map.rating());
+    }
+
+    #[test]
+    fn can_get_more_rating() {
+        let input = "012345
+123456
+234567
+345678
+426789
+567892
+";
+        let map = Map::new(&input.to_string());
+        println!("{:?}", map);
+        assert_eq!(1, map.trailheads.len());
+        assert_eq!(227, map.rating());
     }
 }
