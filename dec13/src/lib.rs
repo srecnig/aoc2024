@@ -148,11 +148,11 @@ mod tests {
             x_delta: 2,
             y_delta: 67,
         };
-        let price_location = Location { x: 8400, y: 5400 };
+        let prize_location = Location { x: 8400, y: 5400 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize(&claw_machine));
     }
@@ -167,11 +167,11 @@ mod tests {
             x_delta: 22,
             y_delta: 1,
         };
-        let price_location = Location { x: 8400, y: 5400 };
+        let prize_location = Location { x: 8400, y: 5400 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize(&claw_machine));
     }
@@ -186,11 +186,11 @@ mod tests {
             x_delta: 22,
             y_delta: 67,
         };
-        let price_location = Location { x: 8400, y: 5400 };
+        let prize_location = Location { x: 8400, y: 5400 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!((80, 40), win_prize(&claw_machine).unwrap());
     }
@@ -205,11 +205,11 @@ mod tests {
             x_delta: 22,
             y_delta: 67,
         };
-        let price_location = Location { x: 8400, y: 5400 };
+        let prize_location = Location { x: 8400, y: 5400 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!((80, 40), win_prize_efficiently(&claw_machine).unwrap());
     }
@@ -224,11 +224,11 @@ mod tests {
             x_delta: 67,
             y_delta: 21,
         };
-        let price_location = Location { x: 12748, y: 12176 };
+        let prize_location = Location { x: 12748, y: 12176 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize(&claw_machine));
     }
@@ -243,11 +243,11 @@ mod tests {
             x_delta: 67,
             y_delta: 21,
         };
-        let price_location = Location { x: 12748, y: 12176 };
+        let prize_location = Location { x: 12748, y: 12176 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize_efficiently(&claw_machine));
     }
@@ -262,11 +262,11 @@ mod tests {
             x_delta: 54,
             y_delta: 27,
         };
-        let price_location = Location { x: 5009, y: 4005 };
+        let prize_location = Location { x: 5009, y: 4005 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize(&claw_machine));
         assert_eq!(None, win_prize_efficiently(&claw_machine));
@@ -282,14 +282,14 @@ mod tests {
             x_delta: 22,
             y_delta: 67,
         };
-        let price_location = Location {
+        let prize_location = Location {
             x: 10000000008400,
             y: 10000000005400,
         };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize_efficiently(&claw_machine));
     }
@@ -304,14 +304,14 @@ mod tests {
             x_delta: 27,
             y_delta: 71,
         };
-        let price_location = Location {
+        let prize_location = Location {
             x: 10000000018641,
             y: 10000000010279,
         };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(
             Some((102851800151, 107526881786)),
@@ -329,11 +329,11 @@ mod tests {
             x_delta: 5,
             y_delta: 9,
         };
-        let price_location = Location { x: 10, y: 10 };
+        let prize_location = Location { x: 10, y: 10 };
         let claw_machine = ClawMachine {
             button_a,
             button_b,
-            prize_location: price_location,
+            prize_location,
         };
         assert_eq!(None, win_prize_efficiently(&claw_machine));
     }
