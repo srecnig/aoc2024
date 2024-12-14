@@ -100,7 +100,6 @@ mod tests {
 
     #[test]
     fn can_make_robot() {
-        // // p=0,4 v=3,-3
         let robot = Robot::new("p=0,4 v=3,-3");
         assert_eq!(0, robot.x);
         assert_eq!(4, robot.y);
@@ -132,11 +131,11 @@ mod tests {
         robot.travel(&map);
         assert_eq!(8, robot.x);
         assert_eq!(2, robot.y);
-        // // second 4
+        // second 4
         robot.travel(&map);
         assert_eq!(10, robot.x);
         assert_eq!(6, robot.y);
-        // // second 5
+        // second 5
         robot.travel(&map);
         assert_eq!(1, robot.x);
         assert_eq!(3, robot.y);
@@ -252,5 +251,3 @@ mod tests {
         println!("{:#?}", display);
     }
 }
-
-// pub fn display_robots(robots: &[Robot], map: &Map) -> Vec<Vec<char>> {
