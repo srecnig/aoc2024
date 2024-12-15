@@ -2,9 +2,7 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct Warehouse {
-    pub tiles: Vec<Vec<Tile>>,
-    width: usize,
-    height: usize,
+    tiles: Vec<Vec<Tile>>,
     robot_position: (usize, usize),
 }
 
@@ -31,13 +29,9 @@ impl Warehouse {
             tiles.push(row);
         }
         let robot_position = robot_position.expect("No robot found!");
-        let width = tiles[0].len();
-        let height = tiles.len();
 
         Warehouse {
             tiles,
-            width,
-            height,
             robot_position,
         }
     }
@@ -62,7 +56,6 @@ impl Warehouse {
                 let mut current_y = empty_space.expect("weird. no empty space, no wall.").1;
                 let mut next_y = current_y + 1;
                 while next_y < self.robot_position.1 {
-                    println!("switcharoo");
                     let moved_from_tile = self.tiles[next_y][x].on_tile;
                     self.tiles[current_y][x].place(moved_from_tile);
                     self.tiles[next_y][x].place(OnTile::Empty);
@@ -119,7 +112,6 @@ impl Warehouse {
                 let mut current_y = empty_space.expect("weird. no empty space, no wall.").1;
                 let mut next_y = current_y - 1;
                 while next_y > self.robot_position.1 {
-                    println!("switcharoo");
                     let moved_from_tile = self.tiles[next_y][x].on_tile;
                     self.tiles[current_y][x].place(moved_from_tile);
                     self.tiles[next_y][x].place(OnTile::Empty);
@@ -160,11 +152,37 @@ impl Warehouse {
             }
         }
     }
+
+    pub fn gps_sum(&self) -> u32 {
+        let mut sum = 0;
+        for (y, row) in self.tiles.iter().enumerate() {
+            for (x, _tile) in row.iter().enumerate().filter(|(_, t)| t.is_box()) {
+                sum += 100 * y + x;
+            }
+        }
+        sum as u32
+    }
+}
+
+impl fmt::Display for Warehouse {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut output: String = "".to_string();
+
+        for tile_row in &self.tiles {
+            let mut row_output: String = "".to_string();
+            for tile in tile_row {
+                row_output = format!("{}{}", row_output, tile.on_tile);
+            }
+            output = format!("{}\n{}", output, row_output);
+        }
+
+        write!(f, "{}", output)
+    }
 }
 
 #[derive(Debug)]
-pub struct Tile {
-    pub on_tile: OnTile,
+struct Tile {
+    on_tile: OnTile,
 }
 
 impl Tile {
@@ -190,7 +208,7 @@ impl Tile {
 }
 
 #[derive(PartialEq, Debug, Copy, Clone)]
-pub enum OnTile {
+enum OnTile {
     Box,
     Empty,
     Robot,
@@ -319,5 +337,15 @@ mod tests {
         assert!(warehouse.tiles[1][1].is_box());
         assert!(warehouse.tiles[2][1].is_box());
         assert!(warehouse.tiles[3][1].is_robot());
+    }
+
+    #[test]
+    fn can_calculate_gps_sum() {
+        // #######
+        // #...O..
+        // #@.....
+        let lines = vec!["#######", "#...O..", "#@....."];
+        let warehouse = Warehouse::new(lines);
+        assert_eq!(104, warehouse.gps_sum());
     }
 }
